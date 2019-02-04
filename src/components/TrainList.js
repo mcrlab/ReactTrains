@@ -1,7 +1,6 @@
 import React from 'react';
 import Train from './Train';
 import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
 
 class TrainList extends React.Component {
   render() {

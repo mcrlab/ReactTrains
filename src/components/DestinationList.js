@@ -3,11 +3,9 @@ import { withStyles } from '@material-ui/core/styles';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import SendIcon from '@material-ui/icons/Send';
 import Chip from '@material-ui/core/Chip';
-
+import Button from '@material-ui/core/Button';
+import StationList from './StationList';
 let styles = {
   list: {
     width: 250,
@@ -19,8 +17,11 @@ let styles = {
 
 class DestinationList extends React.Component {
 
-  handleDelete(e){
-    alert('delete');
+  handleDeleteHomeStation(index){
+    alert(`Delete ${index}`);
+  }
+  handleDeleteWorkStation(index){
+    alert(`Delete ${index}`);
   }
 
   render() {
@@ -31,35 +32,17 @@ class DestinationList extends React.Component {
           component="nav"
           subheader={<ListSubheader component="div">Home Stations</ListSubheader>}
         >
-          <ListItem>
-            {this.props.homeStations.map((item, index) => {
-              return (<Chip
-                key={index}
-                className={classes.chip}
-                label={item}
-                onDelete={this.handleDelete}
-                color="primary"
-              />)
-            })}
-          </ListItem>
+          <StationList stations={this.props.homeStations} handleDelete={this.handleDeleteHomeStation} color={"primary"} />
 
         </List>
         <List
           component="nav"
           subheader={<ListSubheader component="div">Work Stations</ListSubheader>}
         >
+          <StationList stations={this.props.workStations} handleDelete={this.props.handleDeleteWorkStation} color={"secondary"} />
           <ListItem>
-          {this.props.workStations.map((item, index) => {
-            return (<Chip
-              key={index}
-              className={classes.chip}
-              label={item}
-              color="secondary"
-              onDelete={this.handleDelete}
-            />)
-          })}
+            <Button>Save</Button>
           </ListItem>
-
         </List>
       </div>
     )

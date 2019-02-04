@@ -7,7 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
 import amber from '@material-ui/core/colors/amber';
 import red from '@material-ui/core/colors/red';
-import Chip from '@material-ui/core/Chip';
+import ArrowForward from '@material-ui/icons/ArrowForward';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment';
 
@@ -27,28 +27,58 @@ const styles = {
   plusTime: {
     padding: 5,
     color: red[500]
+  },
+  container: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    alignItems: 'stretch'
+  },
+  to: {
+    display: 'inline-flex',
+    textAlign: 'center',
+    alignItems: 'center',
+  },
+  item: {
+    margin: 'auto',
+    width: '40%'
   }
 };
 
 class Train extends React.Component {
+
+  calculateStatus() {
+
+  }
+
   render() {
     const { classes } = this.props;
     const train = this.props.train;
     let trainClass;
-    let delay;
-    if(train.cancelled){
+    let departureDelay, arrivalDelay;
+    if(train.isCancelled || train.origin.etd === "Delayed"){
       trainClass = classes.cancelled;
-    } else if(train.etd === "Delayed" || train.etd !== train.std) {
+      if(train.origin.etd === "Delayed"){
+        departureDelay = <span className={classes.plusTime}>Delayed</span>
+      }
+
+    } else if((train.origin.etd !== train.origin.std) || (train.destination.eta !== train.destination.sta)) {
       trainClass = classes.delayed;
-      if(train.etd === "Delayed"){
-        delay = <span className={classes.plusTime}>DELAYED</span>
-      } else {
-        let etd = moment(train.etd, "HH:mm").format("X");
-        let std = moment(train.std, "HH:mm").format("X");
-        let delayInSeconds = (etd - std);
-        let seconds = delayInSeconds % 60;
-        let minutes = (delayInSeconds - seconds) / 60;
-        delay = <span className={classes.plusTime}>+{minutes}m</span>
+      let etd = moment(train.origin.etd, "HH:mm").format("X");
+      let std = moment(train.origin.std, "HH:mm").format("X");
+      let eta = moment(train.destination.eta, "HH:mm").format("X");
+      let sta = moment(train.destination.sta, "HH:mm").format("X");
+
+      let delayInSeconds = (etd - std);
+      let seconds = delayInSeconds % 60;
+      let minutes = (delayInSeconds - seconds) / 60;
+
+      departureDelay = <span className={classes.plusTime}>+{minutes}m</span>
+
+      delayInSeconds = (eta - sta);
+      seconds = delayInSeconds % 60;
+      minutes = (delayInSeconds - seconds) / 60;
+      if(minutes > 0) {
+        arrivalDelay = <span className={classes.plusTime}>+{minutes}m</span>
       }
     } else {
       trainClass = classes.ontime;
@@ -61,15 +91,27 @@ class Train extends React.Component {
            <p>{train.platform}</p>
          </Avatar>
          <ListItemText>
+         <div className={classes.container}>
+         <div className={classes.item}>
           <Typography variant='subheading'>
-           {train.std}
-           {delay}
+           {train.origin.std}
+           {departureDelay}
           </Typography>
           <Typography variant='caption'>
             <span>{train.origin.name}</span>
-            <strong> to </strong>
+          </Typography>
+          </div>
+          <div className={classes.to}>
+            <ArrowForward />
+          </div>
+          <div className={classes.item}>
+           {train.destination.sta}
+           {arrivalDelay}
+          <Typography variant='caption'>
             <span>{train.destination.name}</span>
           </Typography>
+          </div>
+          </div>
          </ListItemText>
         </ListItem>
         <li>

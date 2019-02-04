@@ -7,12 +7,10 @@ import TrainList from './components/TrainList';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
 import SideDrawer from './components/SideDrawer';
 import moment from 'moment';
+import Spinner from './components/Spinner';
 const theme = createMuiTheme();
-
-
 
 class App extends Component {
   constructor() {
@@ -58,11 +56,12 @@ class App extends Component {
     axios.all(journeys)
       .then((results)=>{
         let departures = [].concat.apply([], results.map((r) => r.data['departures']));
-
+        console.log(departures);
         departures.sort((a,b) => {
-            let dateA = moment(a.etd, "HH:mm").format("X");
-            let dateB = moment(b.etd, "HH:mm").format("X");
-            return dateA > dateB;
+            let dateA = moment(a.origin.etd, "HH:mm").format("X");
+            let dateB = moment(b.origin.etd, "HH:mm").format("X");
+            console.log(dateA, dateB);
+            return dateA - dateB;
         });
 
         this.setState({"trains": departures, loading: false});
@@ -84,16 +83,16 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.loadTrains();
+    let currentHour = moment().format("HH");
+    let direction = (currentHour < 12)? 0:1;
+      this.setState({
+        direction
+      },
+      this.loadTrains);
   }
 
   render() {
     let spinner;
-    if(this.state.loading){
-      spinner = <CircularProgress />
-    } else {
-      spinner = false
-    }
 
     return (
       <MuiThemeProvider theme={theme}>
@@ -103,7 +102,7 @@ class App extends Component {
           <SideDrawer  drawer={this.state.drawer} toggleDrawer={this.toggleDrawer} homeStations={this.state.homeStations} workStations={this.state.workStations}/>
           <FullWidthTabs handleClick={this.handleChange} value={this.state.direction}/>
           <TrainList trains={this.state.trains} />
-          {spinner}
+          <Spinner active={this.state.loading}/>
         </div>
       </MuiThemeProvider>
     );

@@ -8,7 +8,6 @@ const styles = {};
 class SideDrawer extends React.Component {
 
   render() {
-    const { classes } = this.props;
     return (
       <Drawer
         open={this.props.drawer}
