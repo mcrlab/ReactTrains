@@ -1,10 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Chip from '@material-ui/core/Chip';
-import Button from '@material-ui/core/Button';
 
 let styles = {
   list: {

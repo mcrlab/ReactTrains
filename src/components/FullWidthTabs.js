@@ -51,8 +51,8 @@ class FullWidthTabs extends React.Component {
             textColor="primary"
             fullWidth
           >
-            <Tab label="Work" />
-            <Tab label="Home" />
+            <Tab label="Out" />
+            <Tab label="Return" />
           </Tabs>
         </AppBar>
       </div>
