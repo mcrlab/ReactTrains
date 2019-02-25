@@ -27,7 +27,7 @@ class App extends Component {
 
   createJourney(origin, destination) {
     return () => {
-      return axios.get(`https://trains.mcrlab.co.uk/departures/${origin}/${destination}`);
+      return axios.get(`https://trains.mcrlab.co.uk/next/${origin}/${destination}`);
     }
   }
 
@@ -56,11 +56,10 @@ class App extends Component {
       .then((results)=>{
         let departures = [].concat.apply([], results.map((r) => r.data['departures']));
         departures.sort((a,b) => {
-            let dateA = moment(a.origin.etd, "HH:mm").format("X");
-            let dateB = moment(b.origin.etd, "HH:mm").format("X");
+            let dateA = moment(a.origin.estimated, "HH:mm").format("X");
+            let dateB = moment(b.origin.estimated, "HH:mm").format("X");
             return dateA - dateB;
         });
-
         this.setState({"trains": departures, loading: false});
       });
   }

@@ -55,18 +55,18 @@ class Train extends React.Component {
     const train = this.props.train;
     let trainClass;
     let departureDelay, arrivalDelay;
-    if(train.isCancelled || train.origin.etd === "Delayed"){
+    if(train.isCancelled || train.origin.estimated === "Delayed"){
       trainClass = classes.cancelled;
-      if(train.origin.etd === "Delayed"){
+      if(train.origin.estimated === "Delayed"){
         departureDelay = <span className={classes.plusTime}>Delayed</span>
       }
 
-    } else if((train.origin.etd !== train.origin.std) || (train.destination.eta !== train.destination.sta)) {
+    } else if((train.origin.estimated !== train.origin.scheduled) || (train.destination.estimated !== train.destination.scheduled)) {
       trainClass = classes.delayed;
-      let etd = moment(train.origin.etd, "HH:mm").format("X");
-      let std = moment(train.origin.std, "HH:mm").format("X");
-      let eta = moment(train.destination.eta, "HH:mm").format("X");
-      let sta = moment(train.destination.sta, "HH:mm").format("X");
+      let etd = moment(train.origin.estimated, "HH:mm").format("X");
+      let std = moment(train.origin.scheduled, "HH:mm").format("X");
+      let eta = moment(train.destination.estimated, "HH:mm").format("X");
+      let sta = moment(train.destination.scheduled, "HH:mm").format("X");
 
       let delayInSeconds = (etd - std);
       let seconds = delayInSeconds % 60;
@@ -94,7 +94,7 @@ class Train extends React.Component {
          <div className={classes.container}>
          <div className={classes.item}>
           <Typography variant='subheading'>
-           {train.origin.std}
+           {train.origin.scheduled}
            {departureDelay}
           </Typography>
           <Typography variant='caption'>
@@ -105,7 +105,7 @@ class Train extends React.Component {
             <ArrowForward />
           </div>
           <div className={classes.item}>
-           {train.destination.sta}
+           {train.destination.scheduled}
            {arrivalDelay}
           <Typography variant='caption'>
             <span>{train.destination.name}</span>
