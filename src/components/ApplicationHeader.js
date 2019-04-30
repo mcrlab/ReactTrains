@@ -5,6 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Refresh from '@material-ui/icons/Refresh';
+import MenuIcon from '@material-ui/icons/Menu'
 
 const styles = {
   root: {
@@ -12,6 +13,10 @@ const styles = {
   },
   grow: {
     flexGrow: 1,
+  },
+  menuButton: {
+        marginLeft: -12,
+        marginRight: 20,
   },
 };
 
@@ -22,6 +27,9 @@ class ApplicationHeader extends React.Component {
     return (
       <AppBar position="static" color="primary">
          <Toolbar>
+          <IconButton className={classes.menuButton} color="inherit" onClick={this.props.handleMenu} aria-label="Menu">
+            <MenuIcon />
+          </IconButton>
            <Typography variant="title" color="inherit"  className={classes.grow}>
              Trains
            </Typography>

@@ -49,7 +49,7 @@ class FullWidthTabs extends React.Component {
             onChange={this.props.handleClick}
             indicatorColor="primary"
             textColor="primary"
-            fullWidth
+            variant="fullWidth"
           >
             <Tab label="Out" />
             <Tab label="Return" />

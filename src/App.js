@@ -8,6 +8,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import moment from 'moment';
 import Spinner from './components/Spinner';
+import SideDrawer from './components/SideDrawer';
 const theme = createMuiTheme();
 
 class App extends Component {
@@ -16,13 +17,14 @@ class App extends Component {
     this.state = {
       trains: [],
       loading: false,
-      homeStations: ["NMC", "NMN"],
-      workStations: ["MAN"],
+      homeStations: ["ADL", "HWI"],
+      workStations: ["MAN", "MCV"],
       direction: 0,
       drawer: false
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.toggleDrawer = this.toggleDrawer.bind(this);
   }
 
   createJourney(origin, destination) {
@@ -73,7 +75,9 @@ class App extends Component {
   handleClick(state) {
     this.loadTrains();
   }
-
+  toggleDrawer(drawerState) {
+    this.setState({'drawer': drawerState});
+  }
   componentDidMount() {
     let currentHour = moment().format("HH");
     let direction = (currentHour < 12)? 0:1;
@@ -88,7 +92,8 @@ class App extends Component {
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
         <div className="App">
-          <ApplicationHeader handleClick={this.handleClick} />
+          <ApplicationHeader handleClick={this.handleClick} handleMenu={this.toggleDrawer}/>
+          <SideDrawer drawer={this.state.drawer} toggleDrawer= {this.toggleDrawer} homeStations={this.state.homeStations} workStations={this.state.workStations} />
           <FullWidthTabs handleClick={this.handleChange} value={this.state.direction}/>
           <TrainList trains={this.state.trains} />
           <Spinner active={this.state.loading}/>
